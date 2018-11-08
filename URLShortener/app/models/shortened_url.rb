@@ -25,8 +25,22 @@ class ShortenedUrl < ApplicationRecord
     return @short_url
   end
   
+  has_many :visitors,
+    primary_key: :id,
+    foreign_key: :shortened_url_id,
+    class_name: :Visit 
+  
   belongs_to :submitter,
     primary_key: :id,
     foreign_key: :user_id,
     class_name: :User
+    
+  def num_clicks
+    visitors.count
+  end
+  
+  def num_uniques
+    Visit.select(:user_id).distinct.count
+  end 
+  
 end
